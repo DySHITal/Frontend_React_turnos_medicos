@@ -1,34 +1,15 @@
-import { useState } from 'react'
-import reactLogo from '../assets/react.svg'
+import { Link, NavLink } from "react-router-dom";
+import { useAuth } from '../contexts/AuthContext';
 
 import '../../src/App.css'
 
 
 function Home() {
-  const [count, setCount] = useState(0)
+  const { isAuthenticated } = useAuth("state");
+  const { logout } = useAuth("actions");
 
   return (
     <>
-      {/* <div className='flex justify-center'>
-        <a href="https://vite.dev" target="_blank">
-          <img src="/src/assets/Vite.png" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
       <div className='h-screen bg-cyan-500'>
       {/* Navbar */}
       <header className="bg-cyan-500 text-black py-4">
@@ -45,8 +26,31 @@ function Home() {
               <a href="#contact" className="hover:underline">Contacto</a>
             </li>
             <li>
+            <div className="bg-teal-200 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white">
+                    
+                    {isAuthenticated ? (
+                        
+                         <button
+                         onClick={logout}
+                         className="navbar-item button is-danger"
+                     >
+                         Logout
+                     </button>
+                    ):(
+                      
+                        <NavLink
+                            to="/login"
+                            
+                            
+                        >
+                            Iniciar Sesion
+                        </NavLink>
+                    )}
+              </div>
+            </li>
+            <li>
               <button className="bg-teal-200 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white">
-                Iniciar sesión
+                Registrarse
               </button>
             </li>
           </ul>
