@@ -1,9 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from '../contexts/AuthContext';
 
-import '../../src/App.css'
-
-
 function Home() {
   const { isAuthenticated } = useAuth("state");
   const { logout } = useAuth("actions");
