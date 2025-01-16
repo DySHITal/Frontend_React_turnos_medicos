@@ -29,6 +29,7 @@ function Login() {
                     if (!response.ok) {
                         throw new Error("No se pudo iniciar sesión");
                     }
+                    console.log("I", response);
                     return response.json();
                 })
                 .then((response) => {
