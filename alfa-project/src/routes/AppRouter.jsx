@@ -4,6 +4,8 @@ import Login from '../views/Login';
 import Register from '../views/Register';
 import Layout from "../Layout";
 import ProtectedRoute from "../contexts/ProtectedRout";
+import Inicio from "../views/Inicio";
+
 
 
 const AppRouter = createBrowserRouter([
@@ -24,6 +26,10 @@ const AppRouter = createBrowserRouter([
           {
             path: "/register",
             element: <Register />,
+          },
+          {
+            path: "/inicio",
+            element: <Inicio />,
           },
       ],
   }, 

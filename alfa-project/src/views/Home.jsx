@@ -14,7 +14,7 @@ function Home() {
           <h1 className="text-2xl font-bold">Centro Médico Integral</h1>
           <ul className="flex gap-6">
             <li>
-              <a href="#" className="hover:underline">Inicio</a>
+              <a href="/inicio" className="hover:underline">Inicio</a>
             </li>
             <li>
               <a href="#services" className="hover:underline">Servicios</a>
