@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import Navbar from './components/Navbar';
 
 function Register() {
   const nombreRef = useRef("");
@@ -61,6 +62,8 @@ function Register() {
 
 
   return (
+    <>
+    <Navbar/>
     <div className="flex items-center justify-center min-h-screen bg-cyan-100">
       <div className="bg-cyan-500 shadow-lg rounded-lg p-8 w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">Registro</h1>
@@ -177,6 +180,7 @@ function Register() {
         </p>
       </div>
     </div>
+    </>
   );
 }
 
