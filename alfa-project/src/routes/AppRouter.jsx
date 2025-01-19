@@ -5,6 +5,7 @@ import Register from '../views/Register';
 import Layout from "../Layout";
 import ProtectedRoute from "../contexts/ProtectedRout";
 import Inicio from "../views/Inicio";
+import CreateTurno from "../views/CreateTurno";
 
 
 
@@ -30,6 +31,14 @@ const AppRouter = createBrowserRouter([
           {
             path: "/inicio",
             element: <Inicio />,
+          },
+          {
+            path: "/crear-turno",
+            element: 
+            
+            <ProtectedRoute>
+              <CreateTurno />
+            </ProtectedRoute>,
           },
       ],
   }, 

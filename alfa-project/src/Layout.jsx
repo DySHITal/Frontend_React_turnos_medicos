@@ -8,9 +8,9 @@ export default function Layout() {
     return (
         <>
             <AuthProvider>
-                <div className="h-screen">
+                
                      <Outlet />
-                </div>
+                
             </AuthProvider>
             
         </>

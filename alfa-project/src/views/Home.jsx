@@ -1,19 +1,20 @@
 import Navbar from './components/Navbar';
 import img1 from '../assets/imgCMI-3.jpg';
+import Footer from './components/Footer';
+import { NavLink } from "react-router-dom";
 
 function Home() {
  
 
   return (
     <>
-      <div className='h-screen bg-cyan-500 relative isolate overflow-hidden'>
-      {/* Navbar */}
-      <Navbar/> 
+      <div className='h-screen bg-cyan-500 relative isolate overflow-overlay'>
+        <Navbar/> 
       
           <img
               src={img1}
               alt="Centro Médico Integral"
-              className="absolute inset-0 -z-10 w-full h-full object-cover object-center"
+              className="absolute inset-0 -z-10 w-full h-full sm:h-[900px] md:h-[800px] object-cover object-center"
           />
       {/* Hero Section */}
       <section className=" text-center py-20">
@@ -21,7 +22,12 @@ function Home() {
           <h2 className="text-4xl font-bold mb-4">¡Gestiona tus turnos médicos de forma sencilla!</h2>
           <p className="text-lg mb-8">Reserva tus turnos con los mejores profesionales médicos en pocos clics.</p>
           <button className="bg-teal-300 text-blue-600 px-6 py-3 rounded-md hover:bg-blue-500 hover:text-white">
-            Reservar Turno
+              <NavLink
+                  to="/crear-turno"
+              >
+                  Reservar Turno
+              </NavLink>
+            
           </button>
         </div>
       </section>
@@ -47,16 +53,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-cyan-500 text-black py-8 h-screen ">
-        <div className="container mx-auto text-center">
-          <p>&copy; 2025 Centro Medico Integral. Todos los derechos reservados.</p>
-          <div className="flex justify-center gap-4 mt-4">
-            <a href="#" className="hover:underline">Política de Privacidad</a>
-            <a href="#" className="hover:underline">Términos de Uso</a>
-          </div>
-        </div>
-      </footer>
+      <Footer/>
     </div>
     </>
   )

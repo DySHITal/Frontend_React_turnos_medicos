@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useLocation } from "react-router-dom";
+import Navbar from './components/Navbar';
 
 
 function Login() {
@@ -7,6 +9,8 @@ function Login() {
     const passwordRef = useRef("");
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const location = useLocation();
+    const message = location.state?.message;
   
     const { login } = useAuth("actions");
     
@@ -47,9 +51,16 @@ function Login() {
     }
 
     return (
+      <>
+        <Navbar/> 
         <div className="flex items-center justify-center min-h-screen bg-cyan-100">
       <div className="bg-cyan-500 shadow-lg rounded-lg p-8 w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">Inicio de Sesión</h1>
+        {message && (
+                <div className="alert alert-warning text-orange-500 bg-yellow-100 rounded-lg p-4 m-1 mb-4">
+                    {message}
+                </div>
+            )}
         
         {/* Formulario */}
         <form onSubmit={handleLogin} className="space-y-6">
@@ -104,6 +115,7 @@ function Login() {
         </p>
       </div>
     </div>
+    </>
     );
 }
 
