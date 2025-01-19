@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext"; 
 import Navbar from './components/Navbar';
 import { useNavigate } from "react-router-dom";
@@ -7,15 +7,44 @@ function CreateTurno() {
     const fechaRef = useRef("");
     const horaRef = useRef("");
     const pacienteIdRef = useRef("");
-    const profesionalIdRef = useRef("");
 
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const [profesionales, setProfesionales] = useState([]); 
+    const [selectedProfesionalId, setSelectedProfesionalId] = useState(""); 
 
     const { token } = useAuth("state");
     const navigate = useNavigate();
     const { handleTokenExpiration } = useAuth("actions");
+
+    useEffect(() => {
+        const fetchProfesionales = async () => {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/get_profesionales", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    console.log("Token expirado");
+                    handleTokenExpiration();
+                    return;
+                }
+
+                const data = await response.json();
+                console.log("Profesionales", data);
+                setProfesionales(data || []);
+            } catch (error) {
+                console.error("Error al obtener los profesionales:", error);
+                setIsError(true);
+            }
+        };
+
+        fetchProfesionales();
+    }, [token, handleTokenExpiration]);
 
     const handleCrearTurno = async (event) => {
         event.preventDefault();
@@ -35,9 +64,10 @@ function CreateTurno() {
                     Hora: horaRef.current?.value,
                     Estado: "Reservado",
                     ID_Paciente: parseInt(pacienteIdRef.current?.value || "0", 10),
-                    ID_Profesional: parseInt(profesionalIdRef.current?.value || "0", 10),
+                    ID_Profesional: parseInt(selectedProfesionalId || "0", 10),
                 }),
             });
+
             if (response.status === 401) { 
                 console.log("Token expirado");
                 handleTokenExpiration(); 
@@ -50,11 +80,10 @@ function CreateTurno() {
             }
 
             const data = await response.json();
-            
             setSuccessMessage("Turno creado exitosamente");
 
             setTimeout(() => {
-                navigate("/");
+                navigate("/"); 
             }, 3000);
         } catch (error) {
             console.error("Error al crear turno:", error);
@@ -112,30 +141,32 @@ function CreateTurno() {
                         />
                     </div>
 
-                    <div>
-                        <label htmlFor="paciente" className="block text-sm font-medium text-gray-700">
-                            ID del Paciente
-                        </label>
-                        <input
-                            type="number"
-                            id="paciente"
-                            ref={pacienteIdRef}
-                            required
-                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
+                    {/* Mostrar lista de profesionales en un <select> */}
                     <div>
                         <label htmlFor="profesional" className="block text-sm font-medium text-gray-700">
-                            ID del Profesional
+                            Profesional
                         </label>
-                        <input
-                            type="number"
+                        <select
                             id="profesional"
-                            ref={profesionalIdRef}
+                            value={selectedProfesionalId}
+                            onChange={(e) => setSelectedProfesionalId(e.target.value)}
                             required
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                        >
+                            <option value="" disabled>Seleccionar Profesional</option>
+                            {profesionales.length > 0 ? (
+                            profesionales.map((profesional) => (
+                                <option 
+                                    key={profesional.id_profesional} 
+                                    value={profesional.id_profesional}
+                                >
+                                    {profesional.nombre} {profesional.apellido}
+                                </option>
+                            ))
+                        ) : (
+                            <option disabled>Cargando profesionales...</option>
+                        )}
+                        </select>
                     </div>
 
                     {isLoading && <p className="text-green-500 text-sm">Creando turno...</p>}
