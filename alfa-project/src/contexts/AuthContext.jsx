@@ -68,7 +68,7 @@ function AuthProvider({ children }) {
             localStorage.removeItem("authToken");
             navigate("/login");
         },
-        handleTokenExpiration: () => {  // Aquí se debe agregar un ":" después de la función
+        handleTokenExpiration: () => {  
             dispatch({ type: "LOGOUT" });
             localStorage.removeItem("authToken");
             navigate("/login", { state: { message: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente." } });

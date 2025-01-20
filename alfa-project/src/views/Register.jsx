@@ -10,10 +10,13 @@ function Register() {
   const contrasenaRef = useRef("");
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
   function handleRegister(event) {
     event.preventDefault();
+    setSuccessMessage("");
+
     const nombre = nombreRef.current.value;
     const apellido = apellidoRef.current.value;
     const correo = correoRef.current.value;
@@ -46,9 +49,11 @@ function Register() {
                 return response.json();
             })
             .then((data) => {
-                console.log("Registro exitoso", data);
-                // Opcional: redirigir al login
-                window.location.href = "/login";
+
+                setSuccessMessage (data.msg);
+                setTimeout(() => {
+                  navigate("/login");
+              }, 1000);
             })
             .catch((error) => {
                 console.error("Error al registrar usuario:", error);
@@ -123,6 +128,7 @@ function Register() {
               required
               ref={dniRef}
               minLength={8}
+              maxLength={8}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Ingresa tu DNI"
             />
@@ -152,17 +158,16 @@ function Register() {
               required
               ref={contrasenaRef}
               minLength={6}
+              maxLength={8}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Crea una contraseña"
             />
           </div>
 
-          {/* Mensajes de estado */}
           {isLoading && <p className="text-green-500 text-sm">Registrando...</p>}
           {isError && <p className="text-red-500 text-sm">Error al registrarse.</p>}
-          {isSuccess && <p className="text-green-500 text-sm">¡Registro exitoso!</p>}
+          {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
 
-          {/* Botón de Registro */}
           <button
             type="submit"
             className="w-full bg-teal-200 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white"
@@ -171,7 +176,6 @@ function Register() {
           </button>
         </form>
 
-        {/* Enlace para iniciar sesión */}
         <p className="text-center text-sm text-cyan-700 mt-4">
           ¿Ya tienes una cuenta?{" "}
           <a href="/login" className="text-blue-800 hover:underline">

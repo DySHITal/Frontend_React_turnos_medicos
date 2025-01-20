@@ -6,6 +6,7 @@ import Layout from "../Layout";
 import ProtectedRoute from "../contexts/ProtectedRout";
 import Inicio from "../views/Inicio";
 import CreateTurno from "../views/CreateTurno";
+import TurnosPaciente from "../views/TurnosPaciente";
 
 
 
@@ -38,6 +39,14 @@ const AppRouter = createBrowserRouter([
             
             <ProtectedRoute>
               <CreateTurno />
+            </ProtectedRoute>,
+          },
+          {
+            path: "/turnos-paciente",
+            element: 
+            
+            <ProtectedRoute>
+              <TurnosPaciente />
             </ProtectedRoute>,
           },
       ],

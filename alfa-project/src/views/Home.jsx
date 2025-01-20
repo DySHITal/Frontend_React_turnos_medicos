@@ -39,7 +39,12 @@ function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
               <h4 className="text-xl font-bold mb-2">Agenda de Turnos</h4>
-              <p>Reserva tus turnos médicos con facilidad y rapidez.</p>
+              <p>Revisá tus turnos médicos con facilidad y rapidez.</p>
+              <NavLink
+                  to="/turnos-paciente"  className={"hover:text-blue-500 hover:underline"}
+              >
+                  Tus turnos
+              </NavLink>
             </div>
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
               <h4 className="text-xl font-bold mb-2">Historial Médico</h4>
