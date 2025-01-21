@@ -39,11 +39,11 @@ function TurnosPaciente() {
         const data = await response.json();
 
         const formattedTurnos = data.map((turno) => {
-          const [hours, minutes] = turno.hora.split(":"); // para q salga la fecha en 00:00 en vez de 3 partes
+          const [hours, minutes] = turno.hora.split(":"); // para q salga la fecha en 00:00 en vez de 00:00:00
           
           return {
             id: turno.id_turno,
-            fecha: new Date(turno.fecha).toLocaleDateString(),
+            fecha: turno.fecha,
             hora: `${hours}:${minutes}`,
             estado: turno.estado,
             nombreProfesional: turno.nombre || "N/A",

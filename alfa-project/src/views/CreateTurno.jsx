@@ -22,16 +22,8 @@ function CreateTurno() {
             try {
                 const response = await fetch("http://127.0.0.1:5000/get_profesionales", {
                     method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
+                    
                 });
-
-                if (response.status === 401) {
-                    console.log("Token expirado");
-                    handleTokenExpiration();
-                    return;
-                }
 
                 const data = await response.json();
                 setProfesionales(data || []);
@@ -42,7 +34,7 @@ function CreateTurno() {
         };
 
         fetchProfesionales();
-    }, [token, handleTokenExpiration]);
+    }, []);
 
     const handleCrearTurno = async (event) => {
         event.preventDefault();

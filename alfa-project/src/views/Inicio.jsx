@@ -9,8 +9,8 @@ function Inicio() {
     return (
         <>
         
-        <div className="relative isolate overflow-hidden bg-teal-700  h-full sm:h-[900px] md:h-[835px] lg:h-[950px]:">
-             {/* Navbar */}
+        <div className="relative isolate overflow-hidden bg-teal-700  h-full sm:h-[600px] md:h-[835px] lg:h-[950px]:">
+
         <Navbar/>   
 
 
@@ -22,10 +22,10 @@ function Inicio() {
 
             <div className="relative flex items-center justify-center h-full px-1 lg:px-2 my-7">
 
-                <div className="relative w-full max-auto p-10 py-28 rounded-lg shadow-lg">
+                <div className="relative w-full max-auto p-10 py-28 rounded-lg shadow-lg mx-28">
                     <div
-                        className="absolute inset-0 -z-10 bg-gradient-to-r from-teal-500 to-blue-500 opacity-50 rounded-lg"
-                        style={{ mixBlendMode: 'multiply' }}
+                        className="absolute inset-0 -z-10 bg-gradient-to-r from-teal-300 to-cyan-500 opacity-50 rounded-lg "
+                        // style={{ mixBlendMode: 'multiply' }}
                     ></div>
 
                     <div>

@@ -32,7 +32,7 @@ function Navbar() {
                          onClick={logout}
                          className="navbar-item button is-danger"
                      >
-                         Logout
+                         Cerrar Sesión
                      </button>
                     ):(
                       

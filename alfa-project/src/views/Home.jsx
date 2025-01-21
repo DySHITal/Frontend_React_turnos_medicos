@@ -8,13 +8,13 @@ function Home() {
 
   return (
     <>
-      <div className='h-screen bg-cyan-500 relative isolate overflow-overlay'>
-        <Navbar/> 
-      
+     <Navbar/> 
+      <div className='h-full bg-cyan-500 relative isolate overflow-hidden lg:py-3 lg:pb-32 sm:py-12'>
+       
           <img
               src={img1}
               alt="Centro Médico Integral"
-              className="absolute inset-0 -z-10 w-full h-full sm:h-[900px] md:h-[800px] object-cover object-center"
+              className="absolute inset-0 -z-10 w-full h-full sm:h-[540px] md:h-[640px] lg:h-[700px] object-cover object-center"
           />
       {/* Hero Section */}
       <section className=" text-center py-20">
@@ -39,11 +39,10 @@ function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
               <h4 className="text-xl font-bold mb-2">Agenda de Turnos</h4>
-              <p>Revisá tus turnos médicos con facilidad y rapidez.</p>
               <NavLink
                   to="/turnos-paciente"  className={"hover:text-blue-500 hover:underline"}
               >
-                  Tus turnos
+                  Revisá tus turnos médicos con facilidad y rapidez
               </NavLink>
             </div>
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
@@ -52,7 +51,11 @@ function Home() {
             </div>
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
               <h4 className="text-xl font-bold mb-2">Médicos Calificados</h4>
-              <p>Accede a un directorio de profesionales confiables.</p>
+              <NavLink
+                  to="/directorio-profesionales"  className={"hover:text-blue-500 hover:underline"}
+              >
+                  Accede a un directorio de profesionales confiables
+              </NavLink>
             </div>
           </div>
         </div>
