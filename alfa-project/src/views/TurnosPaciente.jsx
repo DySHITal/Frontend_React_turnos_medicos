@@ -4,10 +4,10 @@ import Navbar from "./components/Navbar";
 import { NavLink } from "react-router-dom";
 
 function TurnosPaciente() {
-  const [turnos, setTurnos] = useState([]); // Lista de turnos del paciente
-  const [visibleTurnos, setVisibleTurnos] = useState(4); // Número de turnos visibles
-  const [isLoading, setIsLoading] = useState(true); // Estado de carga
-  const [isError, setIsError] = useState(false); // Estado de error
+  const [turnos, setTurnos] = useState([]); 
+  const [visibleTurnos, setVisibleTurnos] = useState(4);
+  const [isLoading, setIsLoading] = useState(true); 
+  const [isError, setIsError] = useState(false); 
   const [successMessage, setSuccessMessage] = useState("");
 
   const { token} = useAuth("state");
@@ -39,16 +39,15 @@ function TurnosPaciente() {
         const data = await response.json();
 
         const formattedTurnos = data.map((turno) => {
-          // console.log(turno[2]);
-          const [hours, minutes] = turno[2].split(":"); // para q salga la fecha en 00:00 en vez de 3 partes
+          const [hours, minutes] = turno.hora.split(":"); // para q salga la fecha en 00:00 en vez de 3 partes
           
           return {
-            id: turno[0],
-            fecha: new Date(turno[1]).toLocaleDateString(),
+            id: turno.id_turno,
+            fecha: new Date(turno.fecha).toLocaleDateString(),
             hora: `${hours}:${minutes}`,
-            estado: turno[3],
-            nombreProfesional: turno[4] || "N/A",
-            apellidoProfesional: turno[5] || "N/A",
+            estado: turno.estado,
+            nombreProfesional: turno.nombre || "N/A",
+            apellidoProfesional: turno.apellido || "N/A",
           };
         });
         
@@ -106,7 +105,9 @@ function TurnosPaciente() {
       }
 
       const data = await response.json();
+      
       setTurnos((prevTurnos) => prevTurnos.filter((turno) => turno.id !== idTurno));
+      
       setSuccessMessage(data.msg || "Turno cancelado exitosamente.");
       setTimeout(() => {
         setSuccessMessage("");
@@ -165,9 +166,10 @@ function TurnosPaciente() {
               <tbody>
                 {turnos.slice(0, visibleTurnos).map((turno) => (
                   <tr
+
                     key={turno.id}
                     className="bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white"
-                  >
+                  > 
                     <td className="border border-gray-200 px-4 py-2">{turno.fecha}</td>
                     <td className="border border-gray-200 px-4 py-2">{turno.hora}</td>
                     <td className="border border-gray-200 px-4 py-2">{turno.estado}</td>
@@ -176,6 +178,7 @@ function TurnosPaciente() {
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
                       <button
+                      
                         onClick={() => cancelarTurno(turno.id)}
                         className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"
                       >
