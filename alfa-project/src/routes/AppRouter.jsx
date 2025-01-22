@@ -8,6 +8,7 @@ import Inicio from "../views/Inicio";
 import CreateTurno from "../views/CreateTurno";
 import TurnosPaciente from "../views/TurnosPaciente";
 import DirectorioProfesionales from "../views/DirectorioProfesionales";
+import PacienteProfile from "../views/PacienteProfile";
 
 
 
@@ -54,7 +55,14 @@ const AppRouter = createBrowserRouter([
             path: "/directorio-profesionales",
             element: <DirectorioProfesionales/>
           },
-
+          {
+            path: "/paciente-profile",
+            element: 
+            
+            <ProtectedRoute>
+              <PacienteProfile />
+            </ProtectedRoute>,
+          },
           
       ],
   }, 

@@ -4,13 +4,12 @@ import Navbar from "./components/Navbar";
 import { NavLink } from "react-router-dom";
 
 function TurnosPaciente() {
-  const [turnos, setTurnos] = useState([]); 
-  const [visibleTurnos, setVisibleTurnos] = useState(4);
-  const [isLoading, setIsLoading] = useState(true); 
-  const [isError, setIsError] = useState(false); 
+  const [turnos, setTurnos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  const { token} = useAuth("state");
+  const { token } = useAuth("state");
   const { handleTokenExpiration } = useAuth("actions");
 
   useEffect(() => {
@@ -39,8 +38,7 @@ function TurnosPaciente() {
         const data = await response.json();
 
         const formattedTurnos = data.map((turno) => {
-          const [hours, minutes] = turno.hora.split(":"); // para q salga la fecha en 00:00 en vez de 00:00:00
-          
+          const [hours, minutes] = turno.hora.split(":");
           return {
             id: turno.id_turno,
             fecha: turno.fecha,
@@ -50,7 +48,6 @@ function TurnosPaciente() {
             apellidoProfesional: turno.apellido || "N/A",
           };
         });
-        
 
         setTurnos(formattedTurnos);
       } catch (error) {
@@ -63,14 +60,6 @@ function TurnosPaciente() {
 
     fetchTurnos();
   }, [token, handleTokenExpiration]);
-  
-   const mostrarMasTurnos = () => {
-    setVisibleTurnos((prev) => prev + 4); 
-  };
-
-    const mostrarMenosTurnos = () => {
-    setVisibleTurnos((prev) => Math.max(4, prev - 4));
-  };
 
   const cancelarTurno = async (idTurno) => {
     setIsLoading(true);
@@ -105,13 +94,12 @@ function TurnosPaciente() {
       }
 
       const data = await response.json();
-      
-      setTurnos((prevTurnos) => prevTurnos.filter((turno) => turno.id !== idTurno));
-      
+      setTurnos((prevTurnos) =>
+        prevTurnos.filter((turno) => turno.id !== idTurno)
+      );
       setSuccessMessage(data.msg || "Turno cancelado exitosamente.");
       setTimeout(() => {
         setSuccessMessage("");
-        
       }, 2000);
     } catch (error) {
       console.error("Error al cancelar turno:", error);
@@ -146,13 +134,15 @@ function TurnosPaciente() {
   return (
     <>
       <Navbar />
-      <div className="h-full sm:h-[450px] md:h-[560px] lg:h-[890px] bg-cyan-100 py-8">
+      <div className="h-full bg-cyan-100 py-8">
         <div className="max-w-4xl mx-auto bg-cyan-500 shadow-lg rounded-lg p-6">
           <h1 className="text-2xl font-bold text-center mb-6">Mis Turnos</h1>
           {successMessage && (
-            <p className="text-teal-200 font-semibold text-center mb-4">{successMessage}</p>
+            <p className="text-teal-200 font-semibold text-center mb-4">
+              {successMessage}
+            </p>
           )}
-          <div className="overflow-x-auto">
+          <div className="h-64 overflow-y-auto"> 
             <table className="w-full table-auto border-collapse border border-gray-200">
               <thead>
                 <tr className="bg-teal-200 text-blue-600">
@@ -164,12 +154,11 @@ function TurnosPaciente() {
                 </tr>
               </thead>
               <tbody>
-                {turnos.slice(0, visibleTurnos).map((turno) => (
+                {turnos.map((turno) => (
                   <tr
-
                     key={turno.id}
                     className="bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white"
-                  > 
+                  >
                     <td className="border border-gray-200 px-4 py-2">{turno.fecha}</td>
                     <td className="border border-gray-200 px-4 py-2">{turno.hora}</td>
                     <td className="border border-gray-200 px-4 py-2">{turno.estado}</td>
@@ -178,7 +167,6 @@ function TurnosPaciente() {
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
                       <button
-                      
                         onClick={() => cancelarTurno(turno.id)}
                         className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"
                       >
@@ -190,28 +178,14 @@ function TurnosPaciente() {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-between mt-4">
-            <button
-               onClick={mostrarMenosTurnos}
-              className="bg-teal-300 text-blue-600 px-6 py-2 rounded-md hover:bg-blue-500 hover:text-white"
-            >
-              Mostrar Menos
+          <div className="flex justify-center mt-8">
+            <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
+              <NavLink to="/crear-turno">Reservar Nuevo Turno</NavLink>
             </button>
-            <button
-              onClick={mostrarMasTurnos}
-              className="bg-teal-300 text-blue-600 px-6 py-2 rounded-md hover:bg-blue-500 hover:text-white"
-            >
-              Mostrar Más
+            <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
+              <NavLink to="/">Volver</NavLink>
             </button>
           </div>
-        </div>
-        <div className="flex justify-center mt-8">
-          <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
-            <NavLink to="/crear-turno">Reservar Nuevo Turno</NavLink>
-          </button>
-          <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
-                    <NavLink to="/">Volver</NavLink>
-          </button>
         </div>
       </div>
     </>

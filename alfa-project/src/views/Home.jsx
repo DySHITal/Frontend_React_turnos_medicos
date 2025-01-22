@@ -46,8 +46,12 @@ function Home() {
               </NavLink>
             </div>
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
-              <h4 className="text-xl font-bold mb-2">Historial Médico</h4>
-              <p>Consulta tu historial médico desde cualquier lugar.</p>
+              <h4 className="text-xl font-bold mb-2">Perfil</h4>
+              <NavLink
+                  to="/paciente-profile"  className={"hover:text-blue-500 hover:underline"}
+              >
+                  Accedé a tus datos personales
+              </NavLink>
             </div>
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
               <h4 className="text-xl font-bold mb-2">Médicos Calificados</h4>
