@@ -5,8 +5,8 @@ import Footer from './components/Footer';
 import { NavLink } from "react-router-dom";
 
 function PacienteProfile() {
-  const { token } = useAuth("state"); // Obtiene el token desde el estado global
-  const { handleTokenExpiration } = useAuth("actions"); // Acción para manejar la expiración del token
+  const { token } = useAuth("state"); 
+  const { handleTokenExpiration } = useAuth("actions"); 
   const [paciente, setPaciente] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -24,13 +24,13 @@ function PacienteProfile() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Enviar el token en el encabezado
+            Authorization: `Bearer ${token}`, 
           },
         });
 
         if (response.status === 401) {
-          // Si la respuesta es 401, significa que el token expiró
-          handleTokenExpiration(); // Llama a la acción para manejar la expiración del token
+          
+          handleTokenExpiration(); 
           setError("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
           return;
         }
@@ -49,7 +49,7 @@ function PacienteProfile() {
     };
 
     fetchPacienteData();
-  }, [token, handleTokenExpiration]); // Dependencias: se ejecuta cuando cambien `token` o `handleTokenExpiration`
+  }, [token, handleTokenExpiration]); 
 
   if (isLoading) {
     return <div>Cargando datos del paciente...</div>;
