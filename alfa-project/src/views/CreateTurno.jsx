@@ -16,7 +16,12 @@ function CreateTurno() {
     const { token } = useAuth("state");
     const navigate = useNavigate();
     const { handleTokenExpiration } = useAuth("actions");
-
+    
+    const today = new Date();
+    const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+        .toISOString()
+        .split("T")[0];
+    
     useEffect(() => {
         const fetchProfesionales = async () => {
             try {
@@ -87,6 +92,14 @@ function CreateTurno() {
             setIsLoading(false);
         }
     };
+    
+    const horariosDisponibles = Array.from({ length: 11 }) // 11 horas entre 08:00 y 18:00
+        .map((_, hour) => {
+            const hourStr = String(hour + 8).padStart(2, "0"); // Esto genera horas entre 08:00 y 18:00
+            return [`${hourStr}:00`, `${hourStr}:30`]; // Devolvemos las dos franjas horarias
+        })
+        .flat(); // Flatten para obtener un solo array de todas las horas
+
 
     return (
         <>
@@ -105,6 +118,7 @@ function CreateTurno() {
                             id="fecha"
                             ref={fechaRef}
                             required
+                            min={localDate}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
@@ -113,13 +127,33 @@ function CreateTurno() {
                         <label htmlFor="hora" className="block text-sm font-medium text-gray-700">
                             Hora
                         </label>
-                        <input
+                        {/*input con restricciones de validacion */}
+                        {/* <input
                             type="time"
                             id="hora"
                             ref={horaRef}
                             required
+                            step="1800"
+                            min="08:00"
+                            max="18:00"
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                            /> */}
+                        
+                        <select
+                            id="hora"
+                            ref={horaRef}
+                            required
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="" disabled>
+                            Seleccionar hora
+                            </option>
+                            {horariosDisponibles.map((hora) => (
+                            <option key={hora} value={hora}>
+                                {hora}
+                            </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div>
@@ -162,10 +196,9 @@ function CreateTurno() {
                         )}
                         </select>
                     </div>
-
-                    {isLoading && <p className="text-green-500 text-sm">Creando turno...</p>}
-                    {isError && <p className="text-red-500 text-sm">Error: {isError.toString()}</p>}
-                    {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
+                    {isLoading && <p className="text-teal-200 font-semibold">Creando turno...</p>}
+                    {isError && <p className="text-red-500 font-semibold">Error: {isError.toString()}</p>}
+                    {successMessage && <p className="text-teal-200 font-semibold">{successMessage}</p>}
 
                     <button
                         type="submit"

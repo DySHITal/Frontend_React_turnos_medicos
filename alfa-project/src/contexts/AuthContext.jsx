@@ -18,11 +18,13 @@ function reducer(state, action) {
                 ...state,
                 token: action.payload.token,
                 isAuthenticated: true,
+                logoutReason: null, // Resetear razón al iniciar sesión
             };
         case ACTIONS.LOGOUT:
             return {
                 isAuthenticated: false,
-                token: null
+                token: null,
+                logoutReason: action.payload?.reason || null, // Guardar la razón
             };
         default:
             return state;
@@ -41,39 +43,25 @@ function AuthProvider({ children }) {
 
     const actions = {
         login: (token) => {
-            dispatch({ type: ACTIONS.LOGIN, payload: { token }});
+            dispatch({ type: ACTIONS.LOGIN, payload: { token } });
             localStorage.setItem("authToken", token);
             const origin = location.state?.from?.pathname || "/";
             navigate(origin);
         },
-        logout: async () => {
-            try {
-                const response = await fetch("http://127.0.0.1:5000/logout", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${state.token}`,
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                } else {
-                    console.error("Error al cerrar sesión en el servidor");
-                }
-            } catch (error) {
-                console.error("Error de red al cerrar sesión:", error);
-            }
-            dispatch({ type: ACTIONS.LOGOUT });
+        logout: () => {
+            dispatch({ type: ACTIONS.LOGOUT, payload: { reason: "manual" } }); // Cierre manual
             localStorage.removeItem("authToken");
-            navigate("/login");
+            navigate("/login", {
+                state: { message: "Has cerrado sesión exitosamente." },
+            });
         },
-        handleTokenExpiration: () => {  
-            dispatch({ type: "LOGOUT" });
+        handleTokenExpiration: () => {
+            dispatch({ type: ACTIONS.LOGOUT, payload: { reason: "expired" } }); // Expiración del token
             localStorage.removeItem("authToken");
-            navigate("/login", { state: { message: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente." } });
+            navigate("/login", {
+                state: { message: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente." },
+            });
         },
-        
     };
     
 

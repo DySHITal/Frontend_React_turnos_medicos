@@ -158,16 +158,16 @@ function Register() {
               name="contrasena"
               required
               ref={contrasenaRef}
-              minLength={6}
-              maxLength={8}
+              minLength={8}
+              maxLength={14}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Crea una contraseña"
             />
           </div>
 
-          {isLoading && <p className="text-green-500 text-sm">Registrando...</p>}
-          {isError && <p className="text-red-500 text-sm">Error al registrarse.</p>}
-          {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
+          {isLoading && <p className="text-teal-200 font-semibold">Registrando...</p>}
+          {isError && <p className="text-red-500 font-semibold">Error al registrarse.</p>}
+          {successMessage && <p className="text-teal-200 font-semibold">{successMessage}</p>}
 
           <button
             type="submit"

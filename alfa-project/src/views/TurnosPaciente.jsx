@@ -134,8 +134,8 @@ function TurnosPaciente() {
   return (
     <>
       <Navbar />
-      <div className="h-full bg-cyan-100 py-8">
-        <div className="max-w-4xl mx-auto bg-cyan-500 shadow-lg rounded-lg p-6">
+      <div className="bg-cyan-100 py-8  min-h-screen ">
+        <div className="max-w-4xl mx-auto bg-cyan-500 shadow-lg rounded-lg p-10 mt-16">
           <h1 className="text-2xl font-bold text-center mb-6">Mis Turnos</h1>
           {successMessage && (
             <p className="text-teal-200 font-semibold text-center mb-4">
@@ -143,14 +143,14 @@ function TurnosPaciente() {
             </p>
           )}
           <div className="h-64 overflow-y-auto"> 
-            <table className="w-full table-auto border-collapse border border-gray-200">
+            <table className="w-full table-auto border-collapse border border-cyan-500">
               <thead>
                 <tr className="bg-teal-200 text-blue-600">
-                  <th className="border border-gray-200 px-4 py-2 text-left">Fecha</th>
-                  <th className="border border-gray-200 px-4 py-2 text-left">Hora</th>
-                  <th className="border border-gray-200 px-4 py-2 text-left">Estado</th>
-                  <th className="border border-gray-200 px-4 py-2 text-left">Profesional</th>
-                  <th className="border border-gray-200 px-4 py-2 text-left">Cancelar</th>
+                  <th className="border border-cyan-500 px-4 py-2 text-left">Fecha</th>
+                  <th className="border border-cyan-500 px-4 py-2 text-left">Hora</th>
+                  <th className="border border-cyan-500 px-4 py-2 text-left">Estado</th>
+                  <th className="border border-cyan-500 px-4 py-2 text-left">Profesional</th>
+                  <th className="border border-cyan-500 px-4 py-2 text-left">Cancelar</th>
                 </tr>
               </thead>
               <tbody>
@@ -159,13 +159,13 @@ function TurnosPaciente() {
                     key={turno.id}
                     className="bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white"
                   >
-                    <td className="border border-gray-200 px-4 py-2">{turno.fecha}</td>
-                    <td className="border border-gray-200 px-4 py-2">{turno.hora}</td>
-                    <td className="border border-gray-200 px-4 py-2">{turno.estado}</td>
-                    <td className="border border-gray-200 px-4 py-2">
+                    <td className="border border-cyan-500 px-4 py-2">{turno.fecha}</td>
+                    <td className="border border-cyan-500 px-4 py-2">{turno.hora}</td>
+                    <td className="border border-cyan-500 px-4 py-2">{turno.estado}</td>
+                    <td className="border border-cyan-500 px-4 py-2">
                       {turno.nombreProfesional} {turno.apellidoProfesional}
                     </td>
-                    <td className="border border-gray-200 px-4 py-2">
+                    <td className="border border-cyan-500 px-4 py-2">
                       <button
                         onClick={() => cancelarTurno(turno.id)}
                         className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"
@@ -178,7 +178,9 @@ function TurnosPaciente() {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-center mt-8">
+          
+        </div>
+        <div className="flex justify-center mt-11">
             <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
               <NavLink to="/crear-turno">Reservar Nuevo Turno</NavLink>
             </button>
@@ -186,7 +188,6 @@ function TurnosPaciente() {
               <NavLink to="/">Volver</NavLink>
             </button>
           </div>
-        </div>
       </div>
     </>
   );

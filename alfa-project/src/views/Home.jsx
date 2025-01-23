@@ -9,7 +9,7 @@ function Home() {
   return (
     <>
      <Navbar/> 
-      <div className='h-full bg-cyan-500 relative isolate overflow-hidden lg:py-3 lg:pb-32 sm:py-12'>
+      <div className='h-full bg-cyan-500 relative isolate overflow-hidden lg:py-13 lg:pb-32 sm:py-0 md:pb-20'>
        
           <img
               src={img1}
