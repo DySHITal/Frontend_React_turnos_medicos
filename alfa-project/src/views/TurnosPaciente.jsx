@@ -61,7 +61,7 @@ function TurnosPaciente() {
     fetchTurnos();
   }, [token, handleTokenExpiration]);
 
-  const cancelarTurno = async (idTurno) => {
+  const cancelarTurno = async (idTurno, fecha, hora) => {
     setIsLoading(true);
     setIsError(false);
     setSuccessMessage("");
@@ -76,6 +76,8 @@ function TurnosPaciente() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            fecha: fecha,
+            hora: hora,
             Razon: "Cancelado por el paciente",
           }),
         }
@@ -135,7 +137,7 @@ function TurnosPaciente() {
     <>
       <Navbar />
       <div className="bg-cyan-100 py-8  min-h-screen ">
-        <div className="max-w-4xl mx-auto bg-cyan-500 shadow-lg rounded-lg p-10 mt-16">
+        <div className="max-w-5xl mx-auto bg-cyan-500 shadow-lg rounded-lg p-10 mt-16">
           <h1 className="text-2xl font-bold text-center mb-6">Mis Turnos</h1>
           {successMessage && (
             <p className="text-teal-200 font-semibold text-center mb-4">
@@ -154,28 +156,45 @@ function TurnosPaciente() {
                 </tr>
               </thead>
               <tbody>
-                {turnos.map((turno) => (
-                  <tr
-                    key={turno.id}
-                    className="bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white"
-                  >
-                    <td className="border border-cyan-500 px-4 py-2">{turno.fecha}</td>
-                    <td className="border border-cyan-500 px-4 py-2">{turno.hora}</td>
-                    <td className="border border-cyan-500 px-4 py-2">{turno.estado}</td>
-                    <td className="border border-cyan-500 px-4 py-2">
-                      {turno.nombreProfesional} {turno.apellidoProfesional}
-                    </td>
-                    <td className="border border-cyan-500 px-4 py-2">
-                      <button
-                        onClick={() => cancelarTurno(turno.id)}
-                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"
-                      >
-                        Cancelar
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {turnos.map((turno) => {
+                  const turnoFechaHora = new Date(`${turno.fecha}T${turno.hora}`); 
+                  const ahora = new Date();
+                  const diferenciaHoras = (turnoFechaHora - ahora) / (1000 * 60 * 60);
+
+                  const noCancelable = diferenciaHoras < 24; 
+
+                  return (
+                    <tr
+                      key={turno.id}
+                      className="bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white"
+                    >
+                      <td className="border border-cyan-500 px-4 py-2">{turno.fecha}</td>
+                      <td className="border border-cyan-500 px-4 py-2">{turno.hora}</td>
+                      <td className="border border-cyan-500 px-4 py-2">{turno.estado}</td>
+                      <td className="border border-cyan-500 px-4 py-2">
+                        {turno.nombreProfesional} {turno.apellidoProfesional}
+                      </td>
+                      <td className="border border-cyan-500 px-4 py-2 flex">
+                        <button
+                          onClick={() => cancelarTurno(turno.id, turno.fecha, turno.hora)}
+                          className={`bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 ${
+                            noCancelable && "opacity-50 cursor-not-allowed"
+                          }`}
+                          disabled={noCancelable} 
+                        >
+                          Cancelar
+                        </button>
+                        {noCancelable && (
+                          <p className="text-xs text-red-600 mt-1 justify-evenly p-1">
+                            No puedes cancelar turnos con menos de 24hs de anticipación.
+                          </p>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
+
             </table>
           </div>
           
