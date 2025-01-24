@@ -3,6 +3,7 @@ import medico from "../assets/medico-icono.png";
 import Navbar from "./components/Navbar";
 import img2 from "../assets/imgCMI-2.jpg";
 import Footer from "./components/Footer";
+import { NavLink } from "react-router-dom";
 
 const DirectorioProfesionales = () => {
   const [profesionales, setProfesionales] = useState([]);
@@ -285,8 +286,18 @@ const DirectorioProfesionales = () => {
               ))}
             </ul>
           </div>
+          
+        </div>
+        <div className="flex justify-center mt-8 ">
+          <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
+            <NavLink to="/crear-turno">Reservar Turno</NavLink>
+          </button>
+          <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
+            <NavLink to="/">Volver</NavLink>
+          </button>
         </div>
       </div>
+      
       <Footer />
     </>
   );
