@@ -36,20 +36,17 @@ function Login() {
                     return response.json();
                 })
                 .then((response) => {
-                    const { access_token } = response[0];                    
-                    // login(access_token);
-                    //console.log(response);
-                    // const { access_token, matricula } = response;
-                    // const access_token = response[0];
-                    const matricula = response[1];
-                    // const matricula = true;
-                    // console.log("access_token", access_token);
-                    // console.log("matricula",matricula);
-                    // Diferenciar entre profesional y paciente
-                    const userType = matricula ? "profesional" : "paciente";
-
-                    // Enviar los datos al contexto de autenticación
-                    login(access_token, userType);  
+                // Ver si respuesta es un array (profesional) o un objeto (paciente)
+                  if (Array.isArray(response)) {
+                      const { access_token } = response[0];
+                      const userType = response[1] ? "profesional" : "paciente";
+                      login(access_token, userType);
+                  } else {
+                      const { access_token } = response;
+                      const userType = "paciente"; 
+                      
+                      login(access_token, userType);
+                  }
                 })
                 .catch((error) => {
                     console.error("Error al iniciar sesión", error);
