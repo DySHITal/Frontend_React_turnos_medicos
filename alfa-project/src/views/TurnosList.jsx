@@ -38,16 +38,21 @@ function TurnosList() {
         const data = await response.json();
 
         const formattedTurnos = data.map((turno) => {
-          const [hours, minutes] = turno.hora.split(":");
-          return {
-            id: turno.id_turno,
-            fecha: turno.fecha,
-            hora: `${hours}:${minutes}`,
-            estado: turno.estado,
-            nombrePaciente: turno.nombre || "N/A",
-            apellidoPaciente: turno.apellido || "N/A",
-          };
-        });
+        const [hours, minutes] = turno.hora.split(":");
+        const fecha = new Date(turno.fecha); 
+        const formattedFecha = fecha.toISOString().split('T')[0];
+        const formattedHora = `${hours}:${minutes}`; 
+            
+            return {
+              id: turno.id_turno,
+              fecha: formattedFecha,
+              hora: formattedHora,
+              estado: turno.estado,
+              nombrePaciente: turno.nombre || "N/A",
+              apellidoPaciente: turno.apellido || "N/A",
+            };
+          });
+          
 
         setTurnos(formattedTurnos);
       } catch (error) {
@@ -60,6 +65,7 @@ function TurnosList() {
 
     fetchTurnos();
   }, [token, handleTokenExpiration]);
+
   const actualizarAsistencia = async (idTurno, check) => {
     setIsLoading(true);
     setIsError(false);
@@ -92,7 +98,7 @@ function TurnosList() {
         prevTurnos.map((turno) =>
           turno.id === idTurno ? { ...turno, estado: check ? "Asistió" : "No asistió" } : turno
         )
-      );
+      ); 
       setSuccessMessage(data.msg || "Estado del turno actualizado exitosamente.");
       setTimeout(() => {
         setSuccessMessage("");
@@ -103,9 +109,30 @@ function TurnosList() {
     } finally {
       setIsLoading(false);
     }
+    
   };
 
   const cancelarTurno = async (idTurno, fecha, hora) => {
+    console.log("f", fecha)
+    console.log("h", hora)
+    const [hours, minutes] = hora.split(":");
+    const formattedHora = `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+    const turnoFechaHora = new Date(`${fecha}T${formattedHora}:00`);
+    const ahora = new Date();
+    const diferenciaHoras = (turnoFechaHora - ahora) / (1000 * 60 * 60);
+
+    const noCancelable = diferenciaHoras < 24;
+
+    if (noCancelable) {
+        alert("El turno no se puede cancelar porque faltan menos de 24 horas.");
+        return;
+    }
+
+    // Formatear la fecha y hora, todo es distinto de lo que tenia en pcientes 
+    // pero quiere recibir eso en cancelar profesional se hizo un merengue, lo salve con esto
+    const fechaFormateada = turnoFechaHora.toISOString().split('T')[0];
+    const horaFormateada = `${turnoFechaHora.getHours()}:${turnoFechaHora.getMinutes().toString().padStart(2, "0")}`;
+
     setIsLoading(true);
     setIsError(false);
     setSuccessMessage("");
@@ -120,8 +147,8 @@ function TurnosList() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            fecha: fecha,
-            hora: hora,
+            fecha: fechaFormateada,
+            hora: horaFormateada,
             Razon: "Cancelado por el Profesional",
           }),
         }
@@ -140,9 +167,7 @@ function TurnosList() {
       }
 
       const data = await response.json();
-      setTurnos((prevTurnos) =>
-        prevTurnos.filter((turno) => turno.id !== idTurno)
-      );
+      
       setSuccessMessage(data.msg || "Turno cancelado exitosamente.");
       setTimeout(() => {
         setSuccessMessage("");
@@ -245,8 +270,11 @@ function TurnosList() {
                        </td>
                        <td className="border border-cyan-500 px-4 py-2">
                         <button
-                          onClick={() => cancelarTurno(turno.id, turno.fecha, turno.hora)}
-                          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"
+                         onClick={() => cancelarTurno(turno.id, turno.fecha, turno.hora)}
+                         className={`bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 ${
+                           noCancelable && "opacity-50 cursor-not-allowed"
+                         }`}
+                         disabled={noCancelable} 
                         >
                           Cancelar
                         </button>
@@ -265,7 +293,7 @@ function TurnosList() {
               <NavLink to="/crear-turno">Reservar Nuevo Turno</NavLink>
             </button> */}
             <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
-              <NavLink to="/dashboardProfesional">Volver</NavLink>
+              <NavLink to="/dashboard-profesional">Volver</NavLink>
             </button>
           </div>
       </div>

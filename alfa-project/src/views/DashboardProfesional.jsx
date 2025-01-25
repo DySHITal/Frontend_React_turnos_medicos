@@ -56,7 +56,7 @@ function Home() {
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
               <h4 className="text-xl font-bold mb-2">Calendario</h4>
               <NavLink
-                  to="/directorio-profesionales"  className={"hover:text-blue-500 hover:underline"}
+                  to="/calendario"  className={"hover:text-blue-500 hover:underline"}
               >
                   Turnos programados
               </NavLink>

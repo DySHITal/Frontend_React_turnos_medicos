@@ -12,6 +12,7 @@ import PacienteProfile from "../views/PacienteProfile";
 import DashboardProfesional from "../views/DashboardProfesional";
 import ProfesionalProfile from "../views/ProfesionalProfile";
 import TurnosList from "../views/TurnosList";
+import Calendar from "../views/CalendarProfesional";
 
 
 
@@ -87,6 +88,14 @@ const AppRouter = createBrowserRouter([
             
             <ProtectedRoute>
               <TurnosList/>
+            </ProtectedRoute>,
+          },
+          {
+            path: "/calendario",
+            element: 
+            
+            <ProtectedRoute>
+              <Calendar/>
             </ProtectedRoute>,
           },
       ],
