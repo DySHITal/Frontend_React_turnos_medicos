@@ -11,6 +11,7 @@ import DirectorioProfesionales from "../views/DirectorioProfesionales";
 import PacienteProfile from "../views/PacienteProfile";
 import DashboardProfesional from "../views/DashboardProfesional";
 import ProfesionalProfile from "../views/ProfesionalProfile";
+import TurnosList from "../views/TurnosList";
 
 
 
@@ -78,6 +79,14 @@ const AppRouter = createBrowserRouter([
             
             <ProtectedRoute>
               <ProfesionalProfile />
+            </ProtectedRoute>,
+          },
+          {
+            path: "/turnos-list",
+            element: 
+            
+            <ProtectedRoute>
+              <TurnosList/>
             </ProtectedRoute>,
           },
       ],

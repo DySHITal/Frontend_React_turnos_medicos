@@ -40,9 +40,9 @@ function Home() {
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
               <h4 className="text-xl font-bold mb-2">Agenda de Turnos</h4>
               <NavLink
-                  to="/historial-paciente"  className={"hover:text-blue-500 hover:underline"}
+                  to="/turnos-list"  className={"hover:text-blue-500 hover:underline"}
               >
-                  Historial de Pacientes
+                  Lista de turnos
               </NavLink>
             </div>
             <div className="bg-teal-200 shadow-md rounded-lg p-6">
