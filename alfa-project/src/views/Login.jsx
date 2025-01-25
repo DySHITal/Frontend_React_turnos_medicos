@@ -36,10 +36,20 @@ function Login() {
                     return response.json();
                 })
                 .then((response) => {
-                    const { access_token } = response;
-                    const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNzMyODg5MSwianRpIjoiNzE5YzU4YTMtMmJlYi00ZGM3LTk3ZTUtNWVjMWQ4ZTU4MzYyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3MzczMjg4OTEsImNzcmYiOiI3ZGZlODcyNi1kMTU5LTQzNzMtYWMxZi01MjczZmVhM2QwYzYiLCJleHAiOjE3MzczMjk3OTF9._CrqKrdk-fSvjZzVXehYvZfgMM1FlzJgXn7CaY7lrE8"
-                    login(access_token);
-                        
+                    const { access_token } = response[0];                    
+                    // login(access_token);
+                    //console.log(response);
+                    // const { access_token, matricula } = response;
+                    // const access_token = response[0];
+                    const matricula = response[1];
+                    // const matricula = true;
+                    // console.log("access_token", access_token);
+                    // console.log("matricula",matricula);
+                    // Diferenciar entre profesional y paciente
+                    const userType = matricula ? "profesional" : "paciente";
+
+                    // Enviar los datos al contexto de autenticación
+                    login(access_token, userType);  
                 })
                 .catch((error) => {
                     console.error("Error al iniciar sesión", error);
