@@ -62,8 +62,6 @@ function TurnosPaciente() {
   }, [token, handleTokenExpiration]);
 
   const cancelarTurno = async (idTurno, fecha, hora) => {
-    console.log("f", fecha)
-    console.log("h", hora)
     setIsLoading(true);
     setIsError(false);
     setSuccessMessage("");
