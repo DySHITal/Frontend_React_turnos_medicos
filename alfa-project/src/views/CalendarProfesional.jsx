@@ -12,6 +12,7 @@ const CalendarProfesional = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Fetch turnos
   const fetchTurnos = async () => {
@@ -40,34 +41,52 @@ const CalendarProfesional = () => {
     }
   };
 
-  // Actualizar asistencia
-  const updateAsistencia = async (idTurno, asistio) => {
+  const updateAsistencia = async (idTurno, check) => {
+    setIsLoading(true);
+    setError(false);
+    setSuccessMessage("");
+  
     try {
-      const response = await fetch(`http://127.0.0.1:5000/turnos/${idTurno}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ asistio }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al actualizar la asistencia.");
+      const response = await fetch(
+        `http://127.0.0.1:5000/asistir/${idTurno}?check=${check}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.status === 401) {
+        console.log("Token expirado");
+        handleTokenExpiration();
+        return;
       }
-
-      // Actualizar estado local
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al actualizar el turno");
+      }
+  
+      const data = await response.json();
       setTurnos((prevTurnos) =>
         prevTurnos.map((turno) =>
-          turno.id === idTurno ? { ...turno, asistio } : turno
+          turno.id_turno === idTurno ? { ...turno, estado: check ? "Asistió" : "No asistió" } : turno
         )
-      );
-    } catch (err) {
-      setError(err.message);
+      ); 
+      setSuccessMessage(data.msg || "Estado del turno actualizado exitosamente.");
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 2000);
+    } catch (error) {
+      console.error("Error al actualizar el turno:", error);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
+    
   };
 
-  // Filtrar turnos por fecha seleccionada
   const getEventsForDate = (date) => {
     const formattedDate = date.toISOString().split("T")[0];
     return turnos.filter(
@@ -75,7 +94,6 @@ const CalendarProfesional = () => {
     );
   };
 
-  // Renderizar turnos con asistencia
   const renderTurnos = () => {
     const events = getEventsForDate(selectedDate);
     if (events.length === 0) {
@@ -88,7 +106,7 @@ const CalendarProfesional = () => {
             >
         {events.map((turno, index) => (
           <li
-            key={turno.id || index}
+            key={turno.id_turno || index}
             className={`p-2 border rounded-md shadow-sm ${
               turno.asistio === true
                 ? "bg-green-100"
@@ -102,13 +120,13 @@ const CalendarProfesional = () => {
             <div className="mt-2">
               <button
                 className="px-3 py-1 mr-2 bg-green-500 text-white rounded-md"
-                onClick={() => updateAsistencia(turno.id, true)}
+                onClick={() => updateAsistencia(turno.id_turno, true)}
               >
                 Asistió
               </button>
               <button
                 className="px-3 py-1 bg-red-500 text-white rounded-md"
-                onClick={() => updateAsistencia(turno.id, false)}
+                onClick={() => updateAsistencia(turno.id_turno, false)}
               >
                 No Asistió
               </button>
@@ -120,7 +138,6 @@ const CalendarProfesional = () => {
     );
   };
 
-  // Resaltar fechas con turnos en el calendario
   const highlightDates = ({ date }) => {
     const formattedDate = date.toISOString().split("T")[0];
     const hasAppointments = turnos.some(
@@ -129,7 +146,6 @@ const CalendarProfesional = () => {
     return hasAppointments ? "bg-green-300" : null;
   };
 
-  // Fetch turnos al montar el componente
   useEffect(() => {
     fetchTurnos();
   }, []);
@@ -157,6 +173,11 @@ const CalendarProfesional = () => {
           <h2 className="text-xl font-semibold mb-3">
             Turnos para el {selectedDate.toLocaleDateString()}
           </h2>
+          {successMessage && (
+            <p className="text-emerald-500 font-semibold text-center mb-4">
+              {successMessage}
+            </p>
+          )}
           {renderTurnos()}
         </div>
      </div>
