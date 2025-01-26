@@ -167,7 +167,11 @@ function TurnosList() {
       }
 
       const data = await response.json();
-      
+      setTurnos((prevTurnos) =>
+        prevTurnos.map((turno) =>
+          turno.id === idTurno ? { ...turno, estado: turno.estado = "Cancelado por Profesional" } : turno
+        )
+      ); 
       setSuccessMessage(data.msg || "Turno cancelado exitosamente.");
       setTimeout(() => {
         setSuccessMessage("");
@@ -257,13 +261,18 @@ function TurnosList() {
                       <td className="border-cyan-500 px-4 py-2 flex justify-between">
                         <button
                           onClick={() => actualizarAsistencia(turno.id, true)}
-                          className="bg-emerald-400 text-white px-3 py-1 rounded-md hover:bg-green-700"
+                          className={`bg-emerald-400 text-white px-3 py-1 rounded-md hover:bg-green-700 ${
+                            noCancelable && "opacity-50 cursor-not-allowed"
+                          }`}
                         >
                           Asistió
                         </button>
                         <button
                           onClick={() => actualizarAsistencia(turno.id, false)}
-                          className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-indigo-500"
+                          className={`bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-indigo-500 ${
+                            noCancelable && "opacity-50 cursor-not-allowed"
+                          }`}
+                          disabled={noCancelable} 
                         >
                           No asistió
                         </button>

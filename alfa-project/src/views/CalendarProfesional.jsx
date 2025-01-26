@@ -14,7 +14,6 @@ const CalendarProfesional = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Fetch turnos
   const fetchTurnos = async () => {
     setIsLoading(true);
     setError(null);
@@ -80,11 +79,10 @@ const CalendarProfesional = () => {
       }, 2000);
     } catch (error) {
       console.error("Error al actualizar el turno:", error);
-      setIsError(true);
+      setError(true);
     } finally {
       setIsLoading(false);
     }
-    
   };
 
   const getEventsForDate = (date) => {
@@ -100,40 +98,37 @@ const CalendarProfesional = () => {
       return <p>No hay turnos para esta fecha.</p>;
     }
     return (
-      <div className="">
-      <ul role="list"
-              className="w-45 min-h-[500px] sm:min-h-[200px] "
-            >
-        {events.map((turno, index) => (
-          <li
-            key={turno.id_turno || index}
-            className={`p-2 border rounded-md shadow-sm ${
-              turno.asistio === true
-                ? "bg-green-100"
+      <div className="space-y-4">
+        {events.map((turno) => (
+          <div
+            key={turno.id_turno}
+            className={`p-4 border rounded-lg shadow-md ${
+              turno.asistio
+                ? "bg-green-200"
                 : turno.asistio === false
-                ? "bg-red-100"
-                : "bg-gray-50"
+                ? "bg-red-200"
+                : "bg-gray-100"
             }`}
           >
-            <strong>Hora:</strong> {turno.hora}  <strong>Paciente:</strong> {turno.nombre}{" "}
-            {turno.apellido}
-            <div className="mt-2">
+            <p><strong>Hora:</strong> {turno.hora}</p>
+            <p><strong>Paciente:</strong> {turno.nombre} {turno.apellido}</p>
+            <p><strong>Estado del turno:</strong> {turno.estado}</p>
+            <div className="mt-4">
               <button
-                className="px-3 py-1 mr-2 bg-green-500 text-white rounded-md"
+                className="px-4 py-2 mr-3 bg-green-600 text-white rounded-md hover:bg-green-700"
                 onClick={() => updateAsistencia(turno.id_turno, true)}
               >
                 Asistió
               </button>
               <button
-                className="px-3 py-1 bg-red-500 text-white rounded-md"
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                 onClick={() => updateAsistencia(turno.id_turno, false)}
               >
                 No Asistió
               </button>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
       </div>
     );
   };
@@ -150,46 +145,45 @@ const CalendarProfesional = () => {
     fetchTurnos();
   }, []);
 
-  if (isLoading) return <p>Cargando turnos...</p>;
+  if (isLoading) return <p className="text-lg text-blue-500">Cargando turnos...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <>
-    <Navbar />
-    <section className=" flex items-center flex-col p-6 bg-cyan-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Calendario de Turnos</h1>
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Calendario */}
-        <div className="w-full ">
-          <Calendar
-            onChange={setSelectedDate}
-            value={selectedDate}
-            tileClassName={highlightDates}
-          />
+      <Navbar />
+      <section className="flex flex-col items-center p-6 bg-cyan-100 min-h-screen">
+        <h1 className="text-3xl font-semibold mb-6">Calendario de Turnos</h1>
+        <div className="flex flex-col md:flex-row gap-2 w-full max-h-full mx-8 ">
+          {/* Calendario */}
+          <div className="w-full m-9 flex justify-center md:w-1/2">
+            <Calendar
+              onChange={setSelectedDate}
+              value={selectedDate}
+              tileClassName={highlightDates}
+              className="rounded-lg shadow-md w-[500px] h-[450px] grid grid-cols-30"
+            />
+          </div>
+
+          {/* Lista de turnos */}
+          <div className="w-full md:w-1/2 max-w-2xl mx-0 max-h-[600px] overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">
+              Turnos para el {selectedDate.toLocaleDateString()}
+            </h2>
+            {successMessage && (
+              <p className="text-emerald-500 font-semibold text-center mb-4">
+                {successMessage}
+              </p>
+            )}
+            {renderTurnos()}
+          </div>
         </div>
 
-        {/* Lista de turnos */}
-        <div>
-          <h2 className="text-xl font-semibold mb-3">
-            Turnos para el {selectedDate.toLocaleDateString()}
-          </h2>
-          {successMessage && (
-            <p className="text-emerald-500 font-semibold text-center mb-4">
-              {successMessage}
-            </p>
-          )}
-          {renderTurnos()}
+        <div className="flex justify-center mt-8">
+          <button className="bg-teal-300 text-blue-600 px-6 py-3 rounded-md hover:bg-teal-500 hover:text-white">
+            <NavLink to="/dashboard-profesional">Volver</NavLink>
+          </button>
         </div>
-     </div>
-     <div className="flex justify-center mt-11">
-            
-            <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
-              <NavLink to="/dashboard-profesional">Volver</NavLink>
-            </button>
-          
-      </div>
-    </section>
-   
+      </section>
     </>
   );
 };
