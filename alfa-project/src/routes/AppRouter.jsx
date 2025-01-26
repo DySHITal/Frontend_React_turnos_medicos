@@ -13,6 +13,7 @@ import DashboardProfesional from "../views/DashboardProfesional";
 import ProfesionalProfile from "../views/ProfesionalProfile";
 import TurnosList from "../views/TurnosList";
 import Calendar from "../views/CalendarProfesional";
+import EditarDisponibilidad from "../views/EditarDisponibilidad";
 
 
 
@@ -96,6 +97,14 @@ const AppRouter = createBrowserRouter([
             
             <ProtectedRoute>
               <Calendar/>
+            </ProtectedRoute>,
+          },
+          {
+            path: "/editar-disponibilidad",
+            element: 
+            
+            <ProtectedRoute>
+              <EditarDisponibilidad/>
             </ProtectedRoute>,
           },
       ],
