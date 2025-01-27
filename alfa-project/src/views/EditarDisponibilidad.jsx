@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { NavLink } from "react-router-dom";
 
 const EditarDisponibilidad = () => {
   const { token } = useAuth("state");
@@ -8,10 +9,12 @@ const EditarDisponibilidad = () => {
   const [idProfesional, setIdProfesional] = useState(null);
   const [disponibilidades, setDisponibilidades] = useState([]);
   const [nuevaDisponibilidad, setNuevaDisponibilidad] = useState([
-    { dias_semana: "", hora_inicio: "", hora_fin: "" },
+    { dias_semana: [], hora_inicio: "", hora_fin: "" },
   ]);
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
+
+  const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
   const fetchDatosProfesional = async () => {
     try {
@@ -68,18 +71,16 @@ const EditarDisponibilidad = () => {
     e.preventDefault();
     setSuccessMessage(null);
     setError(null);
-  
+
     const formattedDisponibilidad = nuevaDisponibilidad.map((disp) => ({
-      dias_semana: disp.dias_semana, 
+      dias_semana: disp.dias_semana.join(","),
       hora_inicio: `${disp.hora_inicio}:00`,
       hora_fin: `${disp.hora_fin}:00`,
-      id_horario: null, 
+      id_horario: null,
     }));
-  
-    console.log("Enviando disponibilidades:", formattedDisponibilidad);
-  
+
     try {
-      const response = await fetch(`http://127.0.0.1:5000/modificar_disponibilidad`, {
+      const response = await fetch("http://127.0.0.1:5000/modificar_disponibilidad", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -89,41 +90,46 @@ const EditarDisponibilidad = () => {
           disponibilidades: formattedDisponibilidad,
         }),
       });
-  
+
       if (response.status === 401) {
         handleTokenExpiration();
         return;
       }
-  
+
       if (!response.ok) {
         throw new Error("Error al modificar la disponibilidad");
       }
-  
+
       const data = await response.json();
       setSuccessMessage(data.msg || "Disponibilidad modificada exitosamente");
-      fetchDisponibilidad(idProfesional); 
+      fetchDisponibilidad(idProfesional);
     } catch (err) {
       console.error("Error al modificar disponibilidad:", err.message);
       setError(err.message);
     }
   };
-  
+
   const handleInputChange = (index, field, value) => {
     const updatedDisponibilidades = [...nuevaDisponibilidad];
-  
+
     if (field === "dias_semana") {
-      updatedDisponibilidades[index][field] = value.replace(/\s*,\s*/g, ",");
+      const selectedDays = updatedDisponibilidades[index].dias_semana;
+      if (selectedDays.includes(value)) {
+        updatedDisponibilidades[index].dias_semana = selectedDays.filter((day) => day !== value);
+      } else {
+        updatedDisponibilidades[index].dias_semana.push(value);
+      }
     } else {
       updatedDisponibilidades[index][field] = value;
     }
-  
+
     setNuevaDisponibilidad(updatedDisponibilidades);
   };
-  
+
   const addHorario = () => {
     setNuevaDisponibilidad([
       ...nuevaDisponibilidad,
-      { dias_semana: "", hora_inicio: "", hora_fin: "" },
+      { dias_semana: [], hora_inicio: "", hora_fin: "" },
     ]);
   };
 
@@ -173,16 +179,19 @@ const EditarDisponibilidad = () => {
             <h3 className="text-lg font-medium mb-2">Horario {index + 1}</h3>
             <div className="space-y-2">
               <div>
-                <label className="block font-medium mb-1">
-                  Días de la semana (Ej: Lunes,Martes):
-                </label>
-                <input
-                  type="text"
-                  value={disp.dias_semana}
-                  onChange={(e) => handleInputChange(index, "dias_semana", e.target.value)}
-                  className="w-full p-2 border rounded-md"
-                  required
-                />
+                <label className="block font-medium mb-1">Días de la semana:</label>
+                <div className="flex flex-wrap gap-2">
+                  {diasSemana.map((dia) => (
+                    <label key={dia} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={disp.dias_semana.includes(dia)}
+                        onChange={() => handleInputChange(index, "dias_semana", dia)}
+                      />
+                      {dia}
+                    </label>
+                  ))}
+                </div>
               </div>
               <div>
                 <label className="block font-medium mb-1">Hora de inicio:</label>
@@ -209,7 +218,7 @@ const EditarDisponibilidad = () => {
                 onClick={() => removeHorario(index)}
                 className="text-red-500 mt-2"
               >
-                Eliminar este horario
+                Limpiar este horario
               </button>
             </div>
           </div>
@@ -228,6 +237,11 @@ const EditarDisponibilidad = () => {
 
       {successMessage && <p className="mt-4 text-green-500">{successMessage}</p>}
       {error && <p className="mt-4 text-red-500">{error}</p>}
+      <div className="flex justify-center mt-8">
+          <button className="bg-teal-300 text-blue-600 px-6 py-3 rounded-md hover:bg-teal-500 hover:text-white">
+            <NavLink to="/dashboard-profesional">Volver</NavLink>
+          </button>
+        </div>
     </section>
   );
 };
