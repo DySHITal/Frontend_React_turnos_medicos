@@ -20,7 +20,7 @@ function Home() {
       <section className=" text-center py-32">
         <div className="container mx-auto">
           <h2 className="text-5xl font-bold mb-4">Dashboard</h2>
-          <p className="text-lg mb-8">Modifica tus horarios de atencion.</p>
+          <p className="text-lg font-semibold mb-8">Modificá tus horarios de atención.</p>
           <button className="bg-teal-300 text-blue-600 px-6 py-3 rounded-md hover:bg-blue-500 hover:text-white">
               <NavLink
                   to="/editar-disponibilidad"

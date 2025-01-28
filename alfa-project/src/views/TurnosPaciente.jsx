@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import { NavLink } from "react-router-dom";
+import Footer from "./components/Footer";
 
 function TurnosPaciente() {
   const [turnos, setTurnos] = useState([]);
@@ -11,6 +12,10 @@ function TurnosPaciente() {
 
   const { token } = useAuth("state");
   const { handleTokenExpiration } = useAuth("actions");
+
+  // fecha local
+  const today = new Date();
+  const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split("T")[0];
 
   useEffect(() => {
     const fetchTurnos = async () => {
@@ -47,8 +52,8 @@ function TurnosPaciente() {
             nombreProfesional: turno.nombre || "N/A",
             apellidoProfesional: turno.apellido || "N/A",
           };
-        });
-
+          
+        }).filter((turno) => turno.fecha >= localDate); // Filtrar fechas anteriores a hoy
         setTurnos(formattedTurnos);
       } catch (error) {
         console.error("Error al obtener los turnos:", error);
@@ -135,8 +140,9 @@ function TurnosPaciente() {
 
   return (
     <>
+    <div className="bg-cyan-500 min-h-screen">
       <Navbar />
-      <div className="bg-cyan-100 py-8  min-h-screen ">
+      <div className="bg-cyan-100 pt-11   ">
         <div className="max-w-5xl mx-auto bg-cyan-500 shadow-lg rounded-lg p-10 mt-16">
           <h1 className="text-2xl font-bold text-center mb-6">Mis Turnos</h1>
           {successMessage && (
@@ -166,7 +172,9 @@ function TurnosPaciente() {
                   return (
                     <tr
                       key={turno.id}
-                      className="bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white"
+                      className={`bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-teal-400 hover:text-white ${
+                        noCancelable && "opacity-80 cursor-not-allowed"
+                      }`}
                     >
                       <td className="border border-cyan-500 px-4 py-2">{turno.fecha}</td>
                       <td className="border border-cyan-500 px-4 py-2">{turno.hora}</td>
@@ -174,7 +182,7 @@ function TurnosPaciente() {
                       <td className="border border-cyan-500 px-4 py-2">
                         {turno.nombreProfesional} {turno.apellidoProfesional}
                       </td>
-                      <td className="border border-cyan-500 px-4 py-2 flex">
+                      <td className="border border-cyan-500 pl-9 py-2 flex ">
                         <button
                           onClick={() => cancelarTurno(turno.id, turno.fecha, turno.hora)}
                           className={`bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 ${
@@ -185,8 +193,8 @@ function TurnosPaciente() {
                           Cancelar
                         </button>
                         {noCancelable && (
-                          <p className="text-xs text-red-600 mt-1 justify-evenly p-1">
-                            No puedes cancelar turnos con menos de 24hs de anticipación.
+                          <p className="text-base text-red-600 mt-1 justify-center p-1">
+                            *
                           </p>
                         )}
                       </td>
@@ -194,19 +202,26 @@ function TurnosPaciente() {
                   );
                 })}
               </tbody>
-
+                
             </table>
+            
           </div>
-          
+          <p className="text-base text-red-600 mt-1 justify-center p-1">
+                            *No puedes cancelar turnos con menos de 24hs de anticipación.
+                          </p>
         </div>
-        <div className="flex justify-center mt-11">
+        <div className="flex justify-center mt-12 mb-32">
             <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
               <NavLink to="/crear-turno">Reservar Nuevo Turno</NavLink>
             </button>
             <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
               <NavLink to="/">Volver</NavLink>
             </button>
-          </div>
+         </div>
+         <div className="align-bottom relative flex-row-reverse">
+         <Footer />
+         </div>
+      </div>
       </div>
     </>
   );

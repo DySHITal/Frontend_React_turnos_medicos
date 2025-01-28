@@ -169,13 +169,13 @@ function PacienteProfile() {
               <>
                 <button
                   onClick={handleSaveChanges}
-                  className="bg-teal-500 text-white px-6 py-3 mx-6 rounded-md hover:bg-teal-700"
+                  className="bg-teal-500 text-white px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white"
                 >
                   Guardar cambios
                 </button>
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="bg-gray-300 text-gray-800 px-6 py-3 mx-6 rounded-md hover:bg-gray-500"
+                  className="bg-blue-500 text-white px-6 py-3 mx-6 rounded-md hover:bg-cyan-500"
                 >
                   Cancelar
                 </button>

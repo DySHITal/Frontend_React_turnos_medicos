@@ -98,13 +98,13 @@ const CalendarProfesional = () => {
       return <p>No hay turnos para esta fecha.</p>;
     }
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 rounded p-4  ">
         {events.map((turno) => (
           <div
             key={turno.id_turno}
-            className={`p-4 border rounded-lg shadow-md ${
+            className={`p-4 rounded-lg shadow-md border-t-4 border-l-2 border-r-2 border-cyan-600 bg-teal-50 hover:bg-teal-100 ${
               turno.asistio
-                ? "bg-green-200"
+                ? "bg-emerald-500"
                 : turno.asistio === false
                 ? "bg-red-200"
                 : "bg-gray-100"
@@ -115,13 +115,13 @@ const CalendarProfesional = () => {
             <p><strong>Estado del turno:</strong> {turno.estado}</p>
             <div className="mt-4">
               <button
-                className="px-4 py-2 mr-3 bg-green-600 text-white rounded-md hover:bg-green-700"
+                className="px-4 py-2 mr-3 bg-emerald-400 text-white rounded-md hover:bg-blue-500"
                 onClick={() => updateAsistencia(turno.id_turno, true)}
               >
                 Asistió
               </button>
               <button
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-blue-700"
                 onClick={() => updateAsistencia(turno.id_turno, false)}
               >
                 No Asistió
@@ -138,7 +138,11 @@ const CalendarProfesional = () => {
     const hasAppointments = turnos.some(
       (turno) => new Date(turno.fecha).toISOString().split("T")[0] === formattedDate
     );
-    return hasAppointments ? "bg-green-300" : null;
+    return hasAppointments 
+      ? 
+    "bg-cyan-200 flex py-7 items-center justify-center rounded-full  font-semibold text-white " 
+      : 
+    "flex py-6 items-center justify-center rounded-full  font-semibold";
   };
 
   useEffect(() => {
@@ -153,19 +157,19 @@ const CalendarProfesional = () => {
       <Navbar />
       <section className="flex flex-col items-center p-6 bg-cyan-100 min-h-screen">
         <h1 className="text-3xl font-semibold mb-6">Calendario de Turnos</h1>
-        <div className="flex flex-col md:flex-row gap-2 w-full max-h-full mx-8 ">
+        <div className="flex flex-col md:flex-row gap-2 w-full max-h-full mx-8  bg-blue-50 px-30 rounded-lg">
           {/* Calendario */}
-          <div className="w-full m-9 flex justify-center md:w-1/2">
+          <div className="w-full m-9 flex justify-center md:w-1/2 items-center ">
             <Calendar
               onChange={setSelectedDate}
               value={selectedDate}
               tileClassName={highlightDates}
-              className="rounded-lg shadow-md w-[500px] h-[450px] grid grid-cols-30"
+              className="rounded-lg shadow-md w-[500px] h-[450px] items-center grid grid-cols-30 border-indigo-200 bg-cyan-50"
             />
           </div>
 
           {/* Lista de turnos */}
-          <div className="w-full md:w-1/2 max-w-2xl mx-0 max-h-[600px] overflow-auto">
+          <div className="w-full md:w-1/2 max-w-2xl mx-0 max-h-[650px] overflow-auto rounded-lg bg-blue-50 p-4">
             <h2 className="text-xl font-semibold mb-4">
               Turnos para el {selectedDate.toLocaleDateString()}
             </h2>

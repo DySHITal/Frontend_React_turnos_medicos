@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { NavLink } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
 const EditarDisponibilidad = () => {
   const { token } = useAuth("state");
@@ -152,9 +153,11 @@ const EditarDisponibilidad = () => {
   }, [idProfesional]);
 
   return (
+    <>
+      <Navbar />
     <section className="bg-cyan-100 min-h-screen flex items-center flex-col p-9">
       <h1 className="text-2xl font-bold mb-4">Gestionar Disponibilidad</h1>
-
+      <div className="flex flex-row md:flex-row gap-3  max-h-full mx-8  items-start">
       <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-4 mb-6">
         <h2 className="text-xl font-semibold mb-2">Disponibilidad actual</h2>
         {disponibilidades.length > 0 ? (
@@ -171,7 +174,7 @@ const EditarDisponibilidad = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 bg-cyan-500 shadow-lg rounded-lg p-8 w-full max-w-md"
+        className="space-y-4 bg-cyan-500 shadow-lg rounded-lg p-8 w-full flex gap-2 flex-col "
       >
         <h2 className="text-xl font-semibold mb-4">Modificar Disponibilidad</h2>
         {nuevaDisponibilidad.map((disp, index) => (
@@ -190,6 +193,7 @@ const EditarDisponibilidad = () => {
                       />
                       {dia}
                     </label>
+                    
                   ))}
                 </div>
               </div>
@@ -226,15 +230,15 @@ const EditarDisponibilidad = () => {
         <button
           type="button"
           onClick={addHorario}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+          className="px-4 py-2 bg-blue-500 text-white rounded-md  hover:bg-teal-500 hover:text-white"
         >
           Agregar otro horario
         </button>
-        <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-md">
+        <button type="submit" className="px-4 py-2 bg-teal-300 text-blue-600 rounded-md hover:bg-emerald-500 hover:text-white">
           Guardar cambios
         </button>
       </form>
-
+      </div>
       {successMessage && <p className="mt-4 text-green-500">{successMessage}</p>}
       {error && <p className="mt-4 text-red-500">{error}</p>}
       <div className="flex justify-center mt-8">
@@ -243,6 +247,7 @@ const EditarDisponibilidad = () => {
           </button>
         </div>
     </section>
+    </>
   );
 };
 

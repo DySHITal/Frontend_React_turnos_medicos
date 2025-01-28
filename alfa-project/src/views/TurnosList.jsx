@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import { NavLink } from "react-router-dom";
+import Footer from "./components/Footer";
 
 function TurnosList() {
   const [turnos, setTurnos] = useState([]);
@@ -208,8 +209,9 @@ function TurnosList() {
 
   return (
     <>
+    <div className="bg-cyan-500 min-h-screen">
       <Navbar />
-      <div className="bg-cyan-100 py-8  min-h-screen ">
+      <div className="bg-cyan-100 pt-8  ">
         <div className="max-w-5xl mx-auto bg-cyan-500 shadow-lg rounded-lg p-10 mt-16">
           <h1 className="text-2xl font-bold text-center mb-6">Mis Turnos</h1>
           {successMessage && (
@@ -220,7 +222,7 @@ function TurnosList() {
           <div className="h-80 overflow-y-auto"> 
             <table className="w-full table-auto border-collapse border border-cyan-500">
               <thead>
-                <tr className="bg-teal-200 text-blue-600">
+                <tr className="bg-teal-200 text-blue-600 ">
                   <th className="border border-cyan-500 px-4 py-2 text-left">Fecha</th>
                   <th className="border border-cyan-500 px-4 py-2 text-left">Hora</th>
                   <th className="border border-cyan-500 px-4 py-2 text-left">Estado</th>
@@ -249,7 +251,10 @@ function TurnosList() {
                     key={turno.id || index} 
                     // key={`${turno.id}-${turno.fecha}-${turno.hora}`}
                     //   key={turno.id}
-                      className="bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-teal-400 hover:text-white"
+                      // className="bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-teal-400 hover:text-white"
+                      className={`bg-cyan-100 text-black px-4 py-2 rounded-md hover:bg-teal-400 hover:text-white ${
+                        noCancelable && "opacity-80 cursor-not-allowed"
+                      }`}
                     >
                       <td className="border border-cyan-500 px-4 py-2">{formattedDate}</td>
                       <td className="border border-cyan-500 px-4 py-2">{turno.hora}</td>
@@ -264,6 +269,7 @@ function TurnosList() {
                           className={`bg-emerald-400 text-white px-3 py-1 rounded-md hover:bg-green-700 ${
                             noCancelable && "opacity-50 cursor-not-allowed"
                           }`}
+                          disabled={noCancelable} 
                         >
                           Asistió
                         </button>
@@ -297,7 +303,7 @@ function TurnosList() {
           </div>
           
         </div>
-        <div className="flex justify-center mt-11">
+        <div className="flex justify-center mt-11 pb-28">
             {/* <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
               <NavLink to="/crear-turno">Reservar Nuevo Turno</NavLink>
             </button> */}
@@ -306,6 +312,11 @@ function TurnosList() {
             </button>
           </div>
       </div>
+      <div className="align-bottom relative flex-row-reverse">
+         <Footer />
+         </div>
+      </div>
+      
     </>
   );
 }

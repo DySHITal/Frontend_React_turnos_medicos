@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import { useNavigate, NavLink } from "react-router-dom";
+import Footer from "./components/Footer";
 
 const CreateTurno = () => {
     const fechaRef = useRef("");
@@ -16,7 +17,7 @@ const CreateTurno = () => {
     const navigate = useNavigate();
     const { handleTokenExpiration } = useAuth("actions");
 
-    const [isError, setIsError] = useState(false);
+    const [isError, setIsError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [diasD, setDiasD] = useState([]);//para mostrar la disponibilidad a los usuarios
@@ -122,7 +123,7 @@ const CreateTurno = () => {
     const handleCrearTurno = async (event) => {
         event.preventDefault();
         setIsLoading(true);
-        setIsError(false);
+        setIsError("");
         setSuccessMessage("");
         try {
             const response = await fetch("http://127.0.0.1:5000/crear_turno", {
@@ -140,17 +141,23 @@ const CreateTurno = () => {
             });
             if (response.status === 401) { 
                 console.log("Token expirado");
+                setIsLoading(false);
                 handleTokenExpiration(); 
                 return;
             }
             if (response.status === 409) {
                 const errorData = await response.json();
-                throw new Error(errorData.msg || "El profesional ya tiene un turno reservado en esa hora.");
+                console.error("Error 409:", errorData.msg);
+                setIsError("El profesional ya tiene un turno reservado en esa hora.");
+                setIsLoading(false); 
+                return;
             }
-
+            
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || "Error al crear el turno");
+                setIsError(errorData.msg || "Error al crear el turno");
+                setIsLoading(false);
+                return;
             }
 
             const data = await response.json();
@@ -166,8 +173,10 @@ const CreateTurno = () => {
 
     return (
         <>
+        <div className="bg-cyan-500 min-h-screen w-full">
             <Navbar />
-            <div className="flex items-center flex-col min-h-screen bg-cyan-100">
+            <div className="bg-cyan-100 pt-8">
+            <div className="flex items-center flex-col">
                 <div className="bg-cyan-500 shadow-lg rounded-lg p-8 w-full max-w-md m-15 mt-32">
                     <h1 className="text-2xl font-bold text-center mb-6">Crear Turno Médico</h1>
 
@@ -250,7 +259,7 @@ const CreateTurno = () => {
 
                     {isError && (
                         <p className="mt-4 text-red-500 text-center">
-                            Ocurrió un error al crear el turno. Por favor, intenta nuevamente.
+                            {isError}
                         </p>
                     )}
 
@@ -260,7 +269,7 @@ const CreateTurno = () => {
                         </p>
                     )}
                 </div>
-                <div className="flex justify-center mt-8">
+                <div className="flex justify-center mt-12 mb-20">
                    <button className="bg-teal-300 text-blue-600 px-6 py-3 mx-6 rounded-md hover:bg-blue-500 hover:text-white">
                              <NavLink to="/turnos-paciente">Mis Turnos</NavLink>
                    </button>
@@ -268,8 +277,13 @@ const CreateTurno = () => {
                              <NavLink to="/">Volver</NavLink>
                   </button>
                 </div>
-            </div>
-        </>
+                <div className="relative bottom-0 w-full ">
+                    <Footer />
+                </div>
+        </div>
+        </div>
+      </div>
+    </>
     );
 };
 
