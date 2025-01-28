@@ -140,9 +140,9 @@ const CalendarProfesional = () => {
     );
     return hasAppointments 
       ? 
-    "bg-cyan-200 flex py-7 items-center justify-center rounded-full  font-semibold text-white " 
+    "bg-cyan-200 flex py-8 items-center justify-center rounded-full px-4  font-semibold text-white " 
       : 
-    "flex py-6 items-center justify-center rounded-full  font-semibold";
+    "flex py-8 items-center justify-center rounded-full  font-semibold px-4";
   };
 
   useEffect(() => {
@@ -155,21 +155,21 @@ const CalendarProfesional = () => {
   return (
     <>
       <Navbar />
-      <section className="flex flex-col items-center p-6 bg-cyan-100 min-h-screen">
+      <section className="flex flex-col items-center p-6 bg-cyan-100 ">
         <h1 className="text-3xl font-semibold mb-6">Calendario de Turnos</h1>
-        <div className="flex flex-col md:flex-row gap-2 w-full max-h-full mx-8  bg-blue-50 px-30 rounded-lg">
+        <div className="flex flex-col md:flex-row  w-full max-h-full p-9 bg-white bg-opacity-65 px-30 rounded-lg">
           {/* Calendario */}
-          <div className="w-full m-9 flex justify-center md:w-1/2 items-center ">
+          <div className="w-full mx-9 flex justify-center md:w-1/2 items-center rounded-lg   bg-blue-50 bg-opacity-65 ">
             <Calendar
               onChange={setSelectedDate}
               value={selectedDate}
               tileClassName={highlightDates}
-              className="rounded-lg shadow-md w-[500px] h-[450px] items-center grid grid-cols-30 border-indigo-200 bg-cyan-50"
+              className="rounded-lg shadow-md w-[600px] h-[520px] items-center grid grid-cols-30 border-t-4 border-l-2 border-r-2 my-4 border-cyan-600 border-b-0 bg-cyan-50"
             />
           </div>
 
           {/* Lista de turnos */}
-          <div className="w-full md:w-1/2 max-w-2xl mx-0 max-h-[650px] overflow-auto rounded-lg bg-blue-50 p-4">
+          <div className="w-full md:w-1/2 max-w-2xl mx-0 max-h-[650px] overflow-auto rounded-lg bg-blue-50 bg-opacity-65 p-4">
             <h2 className="text-xl font-semibold mb-4">
               Turnos para el {selectedDate.toLocaleDateString()}
             </h2>
