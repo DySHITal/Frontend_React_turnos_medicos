@@ -19,7 +19,7 @@ function TurnosList() {
       setIsError(false);
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/turnos_profesional", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}turnos_profesional`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ function TurnosList() {
   
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/asistir/${idTurno}?check=${check}`,
+        `${import.meta.env.VITE_API_URL}asistir/${idTurno}?check=${check}`,
         {
           method: "POST",
           headers: {
@@ -140,7 +140,7 @@ function TurnosList() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/cancelar_turno_profesional/${idTurno}`,
+        `${import.meta.env.VITE_API_URL}cancelar_turno_profesional/${idTurno}`,
         {
           method: "POST",
           headers: {

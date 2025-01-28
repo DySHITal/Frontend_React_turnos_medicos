@@ -4,6 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import { useAuth } from "../contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import { NavLink } from "react-router-dom";
+import Footer from "./components/Footer";
 
 const CalendarProfesional = () => {
   const { token } = useAuth("state");
@@ -18,7 +19,7 @@ const CalendarProfesional = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://127.0.0.1:5000/turnos_profesional", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}turnos_profesional`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -47,7 +48,7 @@ const CalendarProfesional = () => {
   
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/asistir/${idTurno}?check=${check}`,
+        `${import.meta.env.VITE_API_URL}asistir/${idTurno}?check=${check}`,
         {
           method: "POST",
           headers: {
@@ -154,12 +155,15 @@ const CalendarProfesional = () => {
 
   return (
     <>
+    <div className="bg-cyan-500 min-h-screen w-full">
       <Navbar />
-      <section className="flex flex-col items-center p-6 bg-cyan-100 ">
-        <h1 className="text-3xl font-semibold mb-6">Calendario de Turnos</h1>
-        <div className="flex flex-col md:flex-row  w-full max-h-full p-9 bg-white bg-opacity-65 px-30 rounded-lg">
+      <section className="flex flex-col items-center bg-cyan-100 px-12 ">
+        <h1 className="text-3xl flex justify-center  shadow-inner rounded-t-full font-semibold bg-gradient-to-r from-teal-100 to-cyan-400 w-full">Calendario de Turnos</h1>
+        
+        <div className=" flex flex-col md:flex-row  w-full max-h-full p-9 rounded-t shadow-md bg-gradient-to-r from-teal-100 to-cyan-400  px-20 rounded-lg">
+                 
           {/* Calendario */}
-          <div className="w-full mx-9 flex justify-center md:w-1/2 items-center rounded-lg   bg-blue-50 bg-opacity-65 ">
+          <div className="w-full mx-9 flex justify-center md:w-1/2 items-center rounded-lg   bg-teal-50 bg-opacity-65 ">
             <Calendar
               onChange={setSelectedDate}
               value={selectedDate}
@@ -181,13 +185,20 @@ const CalendarProfesional = () => {
             {renderTurnos()}
           </div>
         </div>
-
-        <div className="flex justify-center mt-8">
+      
+        <div className="flex justify-between m-3 ">
+        <button className="bg-teal-300 text-blue-600 px-6 py-3 rounded-md mx-6 hover:bg-teal-500 hover:text-white">
+            <NavLink to="/turnos-list">Historial de turnos</NavLink>
+          </button>
           <button className="bg-teal-300 text-blue-600 px-6 py-3 rounded-md hover:bg-teal-500 hover:text-white">
             <NavLink to="/dashboard-profesional">Volver</NavLink>
           </button>
         </div>
       </section>
+        <div className="relative bottom-0 w-full ">
+                      <Footer />
+        </div>
+      </div>
     </>
   );
 };

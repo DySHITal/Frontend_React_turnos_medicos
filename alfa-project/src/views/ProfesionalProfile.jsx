@@ -31,7 +31,7 @@ function ProfesionalProfile() {
 
     const fetchProfesionalData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/datos_profesional", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}datos_profesional`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -70,7 +70,7 @@ function ProfesionalProfile() {
     const fetchObrasSociales = async (id_profesional) => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:5000/os_profesional/${id_profesional}`,
+          `${import.meta.env.VITE_API_URL}os_profesional/${id_profesional}`,
           {
             method: "GET",
             headers: {
@@ -133,7 +133,7 @@ const handleInputChange = (e) => {
         obras_sociales: obrasSocialesCorrectas, // array de strings
     };
     try {
-      const response = await fetch("http://127.0.0.1:5000/modificar_profesional", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}modificar_profesional`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

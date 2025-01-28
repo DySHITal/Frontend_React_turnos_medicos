@@ -35,7 +35,7 @@ function PacienteProfile() {
 
     const fetchPacienteData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/datos_paciente", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}datos_paciente`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -86,7 +86,7 @@ function PacienteProfile() {
 
   const handleSaveChanges = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/modificar_paciente", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}modificar_paciente`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

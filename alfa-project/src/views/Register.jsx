@@ -29,7 +29,7 @@ function Register() {
 
     if (!isLoading) {
         setIsLoading(true);
-        fetch("http://127.0.0.1:5000/register", {
+        fetch(`${import.meta.env.VITE_API_URL}register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

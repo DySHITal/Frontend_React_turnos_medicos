@@ -31,7 +31,7 @@ const CreateTurno = () => {
     useEffect(() => {
         const fetchProfesionales = async () => {
             try {
-                const response = await fetch("http://127.0.0.1:5000/get_profesionales", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}get_profesionales`, {
                     method: "GET",
                 });
                 const data = await response.json();
@@ -46,7 +46,7 @@ const CreateTurno = () => {
     // Disponibilidad del profesional
     const fetchDisponibilidad = async (idProfesional) => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/disponibilidad/${idProfesional}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}disponibilidad/${idProfesional}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -126,7 +126,7 @@ const CreateTurno = () => {
         setIsError("");
         setSuccessMessage("");
         try {
-            const response = await fetch("http://127.0.0.1:5000/crear_turno", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}crear_turno`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -19,7 +19,7 @@ function Login() {
         setIsError(false);
         if (!isLoading) {
             setIsLoading(true);
-            fetch("http://127.0.0.1:5000/login", {
+            fetch( `${import.meta.env.VITE_API_URL}login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

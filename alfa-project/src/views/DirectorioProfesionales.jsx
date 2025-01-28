@@ -22,7 +22,7 @@ const DirectorioProfesionales = () => {
   const fetchObrasSociales = async (id_profesional) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/os_profesional/${id_profesional}`
+        `${import.meta.env.VITE_API_URL}os_profesional/${id_profesional}`
       );
       if (!response.ok) {
         if (response.status === 404) {
@@ -49,7 +49,7 @@ const DirectorioProfesionales = () => {
     const fetchProfesionales = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:5000/get_profesionales",
+          `${import.meta.env.VITE_API_URL}get_profesionales`,
           {
             method: "GET",
             headers: {
