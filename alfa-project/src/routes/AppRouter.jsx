@@ -107,6 +107,11 @@ const AppRouter = createBrowserRouter([
               <EditarDisponibilidad/>
             </ProtectedRoute>,
           },
+          {
+            path: "*",
+            element: 
+            <h1>Not Found</h1>,
+        },
       ],
   }, 
  
