@@ -15,6 +15,7 @@ import TurnosList from "../views/TurnosList";
 import Calendar from "../views/CalendarProfesional";
 import EditarDisponibilidad from "../views/EditarDisponibilidad";
 import NotFound from "../views/NotFound";
+import About from "../views/About";
 
 
 
@@ -112,6 +113,10 @@ const AppRouter = createBrowserRouter([
             path: "*",
             element: <NotFound/>,
         },
+        {
+          path: "/about",
+          element: <About/>,
+      },
       ],
   }, 
  
