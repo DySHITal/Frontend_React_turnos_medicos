@@ -26,7 +26,7 @@ function Navbar() {
               </a>
             </li>
             <li>
-              <a href="#contact" className="hover:underline">Contacto</a>
+              <a href="/about" className="hover:underline">Sobre Nosotros</a>
             </li>
             <li>
             <div className="bg-teal-200 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white">
