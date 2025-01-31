@@ -29,11 +29,12 @@ function Login() {
                     contrasena: passwordRef.current.value,
                 }),
             })
-                .then((response) => {
+                .then(async(response) => {
+                    const data = await response.json();
                     if (!response.ok) {
-                        throw new Error("No se pudo iniciar sesión");
+                        throw new Error(data.msg || "No se pudo iniciar sesión");
                     }
-                    return response.json();
+                    return data;
                 })
                 .then((response) => {
                 // Ver si respuesta es un array (profesional) o un objeto (paciente)
@@ -50,7 +51,7 @@ function Login() {
                 })
                 .catch((error) => {
                     console.error("Error al iniciar sesión", error);
-                    setIsError(true);
+                    setIsError(error.message);
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -103,7 +104,7 @@ function Login() {
 
           {/* Mensaje de error */}
           {isLoading && <p className="text-green-500 text-sm">Cargando...</p>}
-          {isError && <p className="text-red-500 text-sm">Error al cargar los datos.</p>}
+          {isError && <p className="text-red-500 text-sm">{isError}.</p>}
 
           {/* Botón de Inicio de Sesión */}
           <button
